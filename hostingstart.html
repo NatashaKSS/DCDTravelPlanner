@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PlanMyTrip</title>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="css/scrolling-nav.css" rel="stylesheet">
+
+    </head>
+    <body>
+        <!-- NavBar -->
+        <nav class="navbar navbar-default">
+          <div class="container-fluid">
+
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">PlanMyTrip</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li>
+                    <a class='page-scroll' href="#notes-panel">
+                        My Notes
+                    </a>
+                </li>
+              </ul>
+              <form class="navbar-form navbar-left" method="GET" action="http://dcdtravelplanner.azurewebsites.net">
+                <div class="form-group">
+                  <input type="text" id="myLocation" class="form-control" placeholder="My Current Location" name="location">
+                </div>
+                <button type="submit" onclick = "loadMapScenario()" class="btn btn-default">Submit</button>
+              </form>
+              <ul class="nav navbar-nav navbar-right">
+                <li><a class='page-scroll' href="#help-panel">Help</a></li>
+                <li><a class='page-scroll' href="#contact-panel">Contact Us</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+
+        <!---->
+        <center>
+            <section id='map-panel' class = "col-lg-4 common-section">
+                <div style='height: 100%;'>
+                    <div id='directionsInputContainer'></div>
+                    <div id='printoutPanel'></div>
+                </div>
+            </section>
+
+            <section id='right-panel' class="col-lg-8">
+                <section class = "common-section">
+                    <div id='myMap' class="row" style='height: 80vh;'>
+                    </div>
+                </section>
+
+                <section id='notes-panel' class = "common-section">
+                    <div class="row" style='height: 13vh;'>
+                        <textarea id="comment_text1" class="ui-autocomplete-input" style="width: 100%; margin: 0px; text-align: left;" placeholder="Take notes for your travels!" rows="20" name="comment[text]"
+                                  cols="40" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
+                        </textarea>
+                    </div>
+                </section>
+
+                <section id='help-panel' class = "about-section" style='margin-bottom: 20px; padding: 10px'>
+                    <h1 style="color:#76323F"><span>About</span></h1>
+                         <p style="color:#565656; padding: 10px;">Have too many destinations to visit on your trip? Unsure of the best route to go about and visit as many landmarks as you can? Don't worry! We will plan your trip for you and decide which order of destinations you should go. You can note down important information on our notes section on the page. Built upon Azure Web Application services and using Bing's Mapping APIs, we are able to deliver a fast and responsive application to help fellow travellers. </p>
+                    <h1 style="color:#76323F">How to use</h1>
+                         <p style="color:#565656 padding: 10px;">Type in your respective destinations in the input box to find the ideal path to take. </p>
+                         <p style="color:#565656 padding: 10px;">Track your progress in our notepad.</p>
+                         <p style="color:#565656 padding: 10px;">Play around with Bing maps!</p>
+                </section>
+
+            </section>
+
+        </center>
+
+        <script type='text/javascript'>
+            // Sticky Notes
+            if (localStorage["comment_text1"]) {
+                var comment_text1 = localStorage["comment_text1"];
+                document.getElementById("comment_text1").value = comment_text1;
+            } else {
+                document.getElementById("comment_text1").placeholder = "My notes";
+            }
+
+            document.getElementById("save1").addEventListener("click", function () {
+                console.log("Saving stuff in text box...")
+                var comment_text1 = document.getElementById("comment_text1").value;
+                localStorage.setItem("comment_text1", comment_text1);
+                alert("saved");
+                console.log("saved comment")
+            } , false);
+
+
+            // Geolocation Map Services from Bing Maps API
+            function getCurrentPage(){
+                console.log(window.location.href);
+                return window.location.href;
+            }
+
+            function loadMapScenario() {
+                var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+                    credentials: 'EPk1MyOLNW2I9KXGrfVS~RG03jO9X2rErc8o_Nf13-Q~AkfIyjUHsTj3rlQy-mRG6-u1gSivHrg9KBGzHhfMf6inkpXgYSoPLNKcQwTjm4xi',
+                    center: new Microsoft.Maps.Location(1.289545, 103.849972),
+                    zoom: 12
+                });
+                Microsoft.Maps.loadModule('Microsoft.Maps.Directions', function () {
+                    var directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
+                    directionsManager.setRenderOptions({ itineraryContainer: document.getElementById('printoutPanel') });
+                    directionsManager.showInputPanel('directionsInputContainer');
+                });
+                //Insert my Hotel Location
+                //map.entities.push(Microsoft.Maps.TestDataGenerator.getPushpins(1, map.getBounds()));
+
+
+                var myLocation= getParameterByName('location');
+                if (myLocation==''){
+                    document.getElementById("myLocation").placeholder = "My Current Location";
+                    myLocation = 'Singapore';
+                }
+                else
+                    document.getElementById("myLocation").placeholder = myLocation;
+                if (myLocation == null)
+                    document.getElementById("myLocation").placeholder = "My Current Location";
+
+                console.log(myLocation);
+                Microsoft.Maps.loadModule('Microsoft.Maps.Search', function () {
+                    var searchManager = new Microsoft.Maps.Search.SearchManager(map);
+                    var requestOptions = {
+                        bounds: map.getBounds(),
+                        where: myLocation,
+                        callback: function (answer, userData) {
+                            map.setView({ bounds: answer.results[0].bestView });
+                            map.entities.push(new Microsoft.Maps.Pushpin(answer.results[0].location),{zoom:12});
+                        }
+                    };
+                    searchManager.geocode(requestOptions);
+                });
+            }
+
+            //-------------Search Hotel Destination-----------------------
+            //Make the geocode request.
+            function getParameterByName(name, url) {
+                if (!url) {
+                  url = window.location.href;
+                }
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
+
+        </script>
+
+        <!-- Bing Maps API -->
+        <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
+
+        <!-- jQuery -->
+        <script src="js/jquery.js"></script>
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src="js/bootstrap.min.js"></script>
+
+        <!-- Scrolling Nav JavaScript -->
+        <script src="js/jquery.easing.min.js"></script>
+
+        <!-- Scrolling Page jQuery plugin Navigation -->
+        <script src="js/scrolling-nav.js"></script>
+
+    </body>
+</html>

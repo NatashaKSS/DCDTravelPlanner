@@ -3,7 +3,7 @@ A simple trip planner made on Azure web services using HTML, CSS, JavaScript and
 
 # Setting up your own Azure Web app
 
-## Prerequisites:
+## Prerequisites
 * Have an azure pass or a free azure subscription to host a web app.
 * Have an appropriate app service plan and azure resource group set up.
 

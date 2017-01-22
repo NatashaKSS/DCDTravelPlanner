@@ -6,6 +6,14 @@ A simple trip planner made on Azure web services using HTML, CSS, JavaScript and
 
 ![Screenshot of travel planner](https://github.com/NatashaKSS/DCDTravelPlanner/blob/master/screenshot_web_app.png)
 
+
+This mini-project was a fun way to experiment with Azure web services and Bing API.   
+
+**~** Thanks for taking a look at our repository and we hope that you'll be able to learn something new here! **~**
+
+> Made with love by [Thien Nguyen](https://github.com/NUS-Anonymous), [Natasha Koh](https://github.com/NatashaKSS) and [Zhang Ying](https://github.com/Zing1996)
+
+
 ***
 
 _**Additional Technical Setup Information**_

@@ -1,6 +1,14 @@
 # DCDTravelPlanner
 A simple trip planner made on Azure web services using HTML, CSS, JavaScript and Bing Maps API
 
+> Let's say a person wants to travel from Raffles Place to Sentosa...  
+#### Here's what his/her planned trip route looks like on our web app: 
+
+![Screenshot of travel planner](https://github.com/NatashaKSS/DCDTravelPlanner/blob/master/screenshot_web_app.png)
+
+***
+
+_**Additional Technical Setup Information**_
 # Setting up your own Azure Web app
 
 ## Prerequisites
